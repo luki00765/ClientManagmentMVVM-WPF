@@ -1,0 +1,54 @@
+﻿<Window x:Class="ClientManagment.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:clientsManagement="clr-namespace:ClientManagment.Converter"
+        Title="Client Managment" Height="350" Width="525" MinHeight="350" MinWidth="525">
+
+    <Window.Resources>
+        <clientsManagement:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView Grid.Row="0" ItemsSource="{Binding Path=Clients}" SelectedItem="{Binding Path=SelectedClient}">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="FontSize" Value="15"/>
+                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Padding" Value="3"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="2" BorderBrush="Aqua">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                            <TextBlock Text="{Binding Path=Surname}"/>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" Visibility="{Binding Path=IsDetailsShown, Converter={StaticResource BoolToVisibilityConverter}}">
+            <TextBlock Text="Name:"/>
+            <TextBox HorizontalAlignment="Stretch" Text="{Binding Path=SelectedClient.Name, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Surname:"/>
+            <TextBox HorizontalAlignment="Stretch" Text="{Binding Path=SelectedClient.Surname, UpdateSourceTrigger=PropertyChanged}"/>
+        </StackPanel>
+
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Add" Command="{Binding Path=AddClientCommand}"/>
+            <Button Grid.Column="1" Content="Delete" Command="{Binding Path=DeleteClientCommand}"/>
+        </Grid>
+    </Grid>
+</Window>
